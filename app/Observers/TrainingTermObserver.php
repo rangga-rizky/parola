@@ -25,7 +25,7 @@ class TrainingTermObserver
     }
 
     private function generateTermAssoc($project_id,$corr,$fileHandler){
-        $distinct_terms =  TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray();
+        $distinct_terms =  TrainingTerm::select('term', DB::raw('count(*) as total'))->groupBy("term")->pluck('term')->toArray();
         $categories = Category::orderBy("id")->get();
         $path = "csv/".$project_id."_automatic_assoc.csv";   
         $termsPerCategory = [];
