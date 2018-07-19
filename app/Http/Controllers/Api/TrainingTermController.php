@@ -74,10 +74,11 @@ class TrainingTermController extends Controller
         return response()->json($this->termTransformer->transform($trainingTerm));
     }
 
-    public function store(TrainingTermRequest $request){
+    public function store(TrainingTermRequest $request){        
+        $user = $this->getUser();
         $this->trainingTerm->term = $request->term;
         $this->trainingTerm->category_id = $request->category_id;
-        $this->trainingTerm->project_id = $request->project_id;
+        $this->trainingTerm->project_id = $user->project->id;
         try{            
             $this->trainingTerm->save();
         }catch(\Exception $e){
