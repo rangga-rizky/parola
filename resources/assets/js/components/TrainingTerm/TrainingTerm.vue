@@ -143,6 +143,7 @@
 					    if(error.response.status == 404){
 							alert("Data tidak ditemukan");
 						}else{
+							console.log(error);
 							alert("Terjadi Kesalahan pada server");
 						} 
 						this.pending = false;
