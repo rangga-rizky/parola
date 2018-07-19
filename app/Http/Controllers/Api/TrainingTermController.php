@@ -121,7 +121,7 @@ class TrainingTermController extends Controller
              if($e->getCode() == "23000"){
                 return response()->json(['error' => true, 'message' => 'Failed, Other Data Refrence this data']);
             }
-            return response()->json(['error' => true, 'message' => 'There is problem on server']);
+            return response()->json(['error' => true, 'message' => $e->getMessage()]);
         }
 
         return response()->json(['error' => false, 'message' => 'term success deleted']);
