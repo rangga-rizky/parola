@@ -70,7 +70,8 @@ class CorrelationMeassure
     }
 
     public function buildWordProprotionMatrice(TrainingTerm $trainingTerm,$categories){      
-        $fitur = $trainingTerm->select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray();
+        $fitur = $trainingTerm->select('term', DB::raw('count(*) as total'))->orderBy("term")->groupBy("term")->pluck('term')->toArray();
+       // dd($fitur);
         array_unshift($fitur , ' '); 
         $matriks[] = $fitur;    
         foreach ($categories as $category) {            

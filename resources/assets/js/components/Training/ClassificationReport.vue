@@ -58,7 +58,7 @@
                                         <tr>
                                             <td ><strong>Accuracy</strong></td>
                                             <td colspan="2"><strong>{{dataBayes.accuracy.toFixed(3)}}%</strong></td>
-                                            <td colspan="2"><strong>{{dataManual.accuracy.toFixed(3)}}%</strong></td>
+                                             <!--<td colspan="2"><strong>{{dataManual.accuracy.toFixed(3)}}%</strong></td> -->
                                             <td colspan="2"><strong>{{dataAuto.accuracy.toFixed(3)}}%</strong></td>
                                         </tr>				
 									</tbody>

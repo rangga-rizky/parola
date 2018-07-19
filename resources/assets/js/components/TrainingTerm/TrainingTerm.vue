@@ -144,7 +144,7 @@
 							alert("Data tidak ditemukan");
 						}else{
 							console.log(error);
-							alert("Terjadi Kesalahan pada server");
+							//alert("Terjadi Kesalahan pada server");
 						} 
 						this.pending = false;
 		        });  

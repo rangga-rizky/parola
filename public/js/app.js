@@ -66087,7 +66087,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						alert("Data tidak ditemukan");
 					} else {
 						console.log(error);
-						alert("Terjadi Kesalahan pada server");
+						//alert("Terjadi Kesalahan pada server");
 					}
 					_this2.pending = false;
 				});
@@ -71917,15 +71917,6 @@ var render = function() {
                                 _c("strong", [
                                   _vm._v(
                                     _vm._s(_vm.dataBayes.accuracy.toFixed(3)) +
-                                      "%"
-                                  )
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("td", { attrs: { colspan: "2" } }, [
-                                _c("strong", [
-                                  _vm._v(
-                                    _vm._s(_vm.dataManual.accuracy.toFixed(3)) +
                                       "%"
                                   )
                                 ])
