@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class tweet extends Model
+class Tweet extends Model
 {
      public $timestamps = False; 
 

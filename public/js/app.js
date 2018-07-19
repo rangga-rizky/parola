@@ -66101,7 +66101,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 				_this3.categories = data;
 			}).catch(function (error) {
-				alert("Terjadi Kesalahan pada server");
+				alert("Terjadi Kesalahan saat mengambil data kategori pada server");
 			});
 		},
 		generateTermAssoc: function generateTermAssoc() {

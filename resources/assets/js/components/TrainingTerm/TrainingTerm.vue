@@ -157,7 +157,7 @@
 				        this.categories = data;
 				      })
 			        .catch((error) => {	     
-					   alert("Terjadi Kesalahan pada server");
+					   alert("Terjadi Kesalahan saat mengambil data kategori pada server");
 		        });  
 			},
 			
