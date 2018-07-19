@@ -1,0 +1,26 @@
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+td, th{
+    padding: 5px;
+}
+
+table.fixed {table-layout:fixed; width:100%;}/*Setting the table width is important!*/
+table.fixed td {overflow:hidden;}/*Hide text outside the cell.*/
+table.fixed th:nth-of-type(1) {width:5%;}/*Setting the width of column 1.*/
+table.fixed th:nth-of-type(2) {width:65%;}/*Setting the width of column 2.*/
+table.fixed th:nth-of-type(3) {width:10%;}
+table.fixed th:nth-of-type(4) {width:10%;}
+table.fixed th:nth-of-type(5) {width:10%;}
+
+
+table.col_2 {table-layout:fixed; width:100%;}/*Setting the table width is important!*/
+table.col_2 td {overflow:hidden;}/*Hide text outside the cell.*/
+table.col_2 th:nth-of-type(1) {width:85%;}/*Setting the width of column 1.*/
+table.col_2 th:nth-of-type(2) {width:15%;}

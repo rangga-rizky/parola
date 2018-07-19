@@ -1,0 +1,22 @@
+body{
+	background-color: #fafafa;
+	display: flex;
+ 	min-height: 100vh;
+  	flex-direction: column;
+}
+
+.main-content{
+	margin-top: 5em;
+	flex: 1;
+}
+
+.ui.vertical.menu .menu .item.aktif{
+	background-color:rgba(0,0,0,0.1);
+}
+
+
+
+.ui.sticky.vertical.menu.fixed.top{
+	top:60px;
+}
+
