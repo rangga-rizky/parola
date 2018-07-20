@@ -76,6 +76,17 @@ class TrainingTermController extends Controller
 
     public function store(TrainingTermRequest $request){        
         $user = $this->getUser();
+        switch($request->score){
+            case "MAX":$score = $this->trainingTerm->where("category_id", $request->category_id)->max('score');
+                        break;
+            case "AVG":$score = $this->trainingTerm->where("category_id", $request->category_id)->avg('score');
+                        break;
+            case "MIN":$score = $this->trainingTerm->where("category_id", $request->category_id)->min('score');
+                        break;
+            default:$score = $this->trainingTerm->where("category_id", $request->category_id)->avg('score');
+                    break;
+        }
+        $this->trainingTerm->score = (int)$score;
         $this->trainingTerm->term = $request->term;
         $this->trainingTerm->category_id = $request->category_id;
         $this->trainingTerm->project_id = $user->project->id;

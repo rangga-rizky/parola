@@ -66,7 +66,10 @@ class ComplaintController extends Controller
     }
 
 
-    public function categorize_cc(Request $request){    	
+    public function categorize_cc(Request $request){  
+		
+    	ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 50000);  	
     	$correlationMeassure = new CorrelationMeassure();
 		$complaints = $this->tweet->orderBy('id')->get();
 		$categories = Category::all();	
@@ -83,10 +86,11 @@ class ComplaintController extends Controller
 			$binaryVector = $this->vectorizer->getBinaryVectorFromTokens(explode(",", $complaints[$i]->clean_tweet),$terms);
 			$testing = $binaryVector["vector"];
 			if(array_sum($testing) > 0){
-				$predicted = $correlationMeassure->dotProduct($training,$testing);
+				$predicted = $correlationMeassure->cosineSimilarity($training,$testing);
 			}else{
 				$predicted = "Tidak Terkategori";
 			}
+			$complaints[$i]->words = implode(", ", $binaryVector["words"]);
 			$complaints[$i]->predicted = $predicted;
 			$complaints[$i]->save();		
 		}
@@ -132,6 +136,8 @@ class ComplaintController extends Controller
 	}
 	
 	public function topic_modelling($category_slug){
+		ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 50000);
 		$lda = new LDATopicModels();
 		$n_of_cluster = 4;
 		$category = Category::where("slug",$category_slug)->first();
@@ -162,7 +168,8 @@ class ComplaintController extends Controller
 	}
     
     public function uploadCSV(Request $request){
-		if ($request->hasFile('file')) {
+		if ($request->hasFile('file')) {				
+			$correlationMeassure = new CorrelationMeassure();
 			$path = 'files/';
         	$file_name = $this->fileHandler->upload($request->file('file'),$path);
         	if(is_null($file_name)){
@@ -170,13 +177,23 @@ class ComplaintController extends Controller
 			}
 			$documents = $this->fileHandler->readCSV($path.$file_name,false)["file"];
 			$distinct_terms = $this->fileHandler->readKeyPairCSV('csv/tweet_distinct_terms.csv');
-			foreach ($documents as $document) {
-				
+			$fitur = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray(); 
+			$path = "csv/1_automatic_assoc.csv";
+			$training = $this->fileHandler->readCSV($path,false)["file"];			
+			foreach ($documents as $document) {				
 				$utf8_string = Encoding::fixUTF8($document[1]);
 				$words = $this->textMiner->textPreprocessing($this->textMiner->removeTweetAttr($utf8_string));
+				$binaryVector = $this->vectorizer->getBinaryVectorFromTokens($words,$fitur);
+				$testing = $binaryVector["vector"];
+				if(array_sum($testing) > 0){
+					$predicted = $correlationMeassure->cosineSimilarity($training,$testing);
+				}else{
+					$predicted = "Tidak Terkategori";
+				}
 				$this->tweet->create([
 					'username' => '',
 					'tweet' => $utf8_string,
+					'predicted' => $predicted,
 					'clean_tweet' => implode(",", $words),
 					'timestamp' => 0,
 					'date' => $document[0],
@@ -224,14 +241,14 @@ class ComplaintController extends Controller
 			$terms[] = array($word,$value);
 		}       
 		$this->fileHandler->writeCSV('csv/tweet_distinct_terms.csv',$terms,null);
-		$fitur = Term::orderBy('id')->pluck('term')->toArray(); 
-		//$terms = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray(); 
+		//$fitur = Term::orderBy('id')->pluck('term')->toArray(); 
+		$fitur = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray(); 
 		$path = "csv/1_training_assoc.csv";
 		$training = $this->fileHandler->readCSV($path,false)["file"];
 		$binaryVector = $this->vectorizer->getBinaryVectorFromTokens($words,$fitur);
 		$testing = $binaryVector["vector"];
 		if(array_sum($testing) > 0){
-			$predicted = $correlationMeassure->dotProduct($training,$testing);
+			$predicted = $correlationMeassure->cosineSimilarity($training,$testing);
 		}else{
 			$predicted = "Tidak Terkategori";
 		}

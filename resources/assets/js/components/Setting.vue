@@ -119,8 +119,7 @@
 										<td>
 											<select v-model="method" class="form-control">
 											  <option value=0>Naive-Bayes</option>
-											  <option value=1>Correlation-Meassurement (Manual)</option>
-											  <option value=2>Correlation-Meassurement (Auto)</option>
+											  <option value=2>Correlation-Meassurement</option>
 											</select>
 										</td>
 										<td>

@@ -96,10 +96,9 @@
                 formData.append("file",this.attachment);    
                 axios.post('/api/complaints/upload-csv',formData,{
                     headers: {
-                        'Authorization' : 'Bearer '+ localStorage.getItem("token"),
                         'Content-Type': 'multipart/form-data'
                     },
-                },)
+                })
                 .then(({data}) => {
                    $('#modalAlert').modal('show');
                     this.messages=data.message;                    

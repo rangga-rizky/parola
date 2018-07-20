@@ -66523,13 +66523,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
 			pending: false,
-			selectedCategory: "",
+			selectedCategory: "AVG",
+			selectedScore: "AVG",
 			categories: [],
+			scores: [{ id: "MAX", label: "MAX WEIGHT" }, { id: "AVG", label: "AVG WEIGHT" }, { id: "MIN", label: "MIN WEIGHT" }],
 			term: "",
 			errors: {
 				term: [undefined]
@@ -66552,6 +66564,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			axios.post('/api/training-terms', {
 				term: this.term,
 				category_id: this.selectedCategory,
+				score: this.selectedScore,
 				project_id: 1
 			}).then(function (_ref) {
 				var data = _ref.data;
@@ -66662,6 +66675,53 @@ var render = function() {
                             _vm._v(
                               "\n                                            " +
                                 _vm._s(category.category) +
+                                "\n                                        "
+                            )
+                          ]
+                        )
+                      })
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "" } }, [_vm._v("Bobot")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.selectedScore,
+                            expression: "selectedScore"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.selectedScore = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
+                        }
+                      },
+                      _vm._l(_vm.scores, function(score) {
+                        return _c(
+                          "option",
+                          { key: score.id, domProps: { value: score.id } },
+                          [
+                            _vm._v(
+                              "\n                                            " +
+                                _vm._s(score.label) +
                                 "\n                                        "
                             )
                           ]
@@ -68688,7 +68748,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -69011,12 +69070,8 @@ var render = function() {
                               _vm._v("Naive-Bayes")
                             ]),
                             _vm._v(" "),
-                            _c("option", { attrs: { value: "1" } }, [
-                              _vm._v("Correlation-Meassurement (Manual)")
-                            ]),
-                            _vm._v(" "),
                             _c("option", { attrs: { value: "2" } }, [
-                              _vm._v("Correlation-Meassurement (Auto)")
+                              _vm._v("Correlation-Meassurement")
                             ])
                           ]
                         )
@@ -69961,7 +70016,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             formData.append("file", this.attachment);
             axios.post('/api/complaints/upload-csv', formData, {
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
                     'Content-Type': 'multipart/form-data'
                 }
             }).then(function (_ref) {

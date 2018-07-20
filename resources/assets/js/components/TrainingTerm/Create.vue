@@ -39,6 +39,16 @@
 	                                </select>
                                 </div>
 
+								 <div class="form-group">
+                                    <label for="">Bobot</label>
+                                    <select class="form-control"  v-model="selectedScore">
+                                        <option v-for="score in scores" v-bind:value="score.id" :key="score.id">
+                                            {{ score.label }}
+                                        </option>
+	                                </select>
+                                </div>
+
+
 								<button @click="submit" class="btn btn-success" :disabled="pending == true">
 									<i :class="{'fa fa-plus':!isPending, 'fa fa-circle-o-notch fa-spin':isPending}" ></i> Tambah
 								</button>
@@ -62,8 +72,14 @@ export default {
 	data(){
 		return{
             pending:false,
-            selectedCategory:"",
+            selectedCategory:"AVG",
+			selectedScore:"AVG",
             categories:[],
+			scores:[
+				{id:"MAX",label:"MAX WEIGHT"},
+				{id:"AVG",label:"AVG WEIGHT"},
+				{id:"MIN",label:"MIN WEIGHT"}
+			],
 			term:"",
 			errors:{
 				term:[undefined]
@@ -85,6 +101,7 @@ export default {
                 axios.post('/api/training-terms',{
                     term:this.term,
                     category_id:this.selectedCategory,
+					score:this.selectedScore,
                     project_id:1,
                 })
                 .then(({data}) => {                    
