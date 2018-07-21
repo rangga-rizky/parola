@@ -37,7 +37,7 @@ class ComplaintController extends Controller
         if(is_null($category_id)){
             $tweets = $this->tweet->orderBy("date","DESC")->paginate($limit);
         }else{            
-    		$tweets = $this->tweet->where(["category_id" => $category_id])->orderBy("date","DESC")->paginate($limit);
+    		$tweets = $this->tweet->where(["predicted" => $category_id])->orderBy("date","DESC")->paginate($limit);
         }  	
     	$n = $this->tweet->count();
     	$latest_data = $this->tweet->orderBy("date","DESC")->first()->getDateTimeLocalized();
