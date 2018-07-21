@@ -25,13 +25,21 @@
 	                                    {{ category.category }}
 	                                </option>
 	                             </select>
-						</div>
+						</div>						
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-10">					
 						<div class="card">
-							<div class="card-header">
+							<div class="card-header">								
+								 <text-field 
+								 	name="term"
+									placeholder="Cari Kata Kunci..."
+									label=""
+									info=""
+									type="text"
+									@changed="changeTerm"
+									/>
 								 <router-link  :to="{ name: 'training-terms-create' }"  class="btn btn-success">
 									<i class="fa fa-plus"></i> Tambah Kata Kunci
 								 </router-link>
@@ -125,6 +133,24 @@
 					   alert("Terjadi Kesalahan pada server");
 					   this.loading = false;
 		        });  
+			},
+
+			changeTerm(text){		
+				if(text.length > 2){							
+					this.loading = true;
+					axios.get(`/api/training-terms/search/${text}`)
+			        .then(({data}) => {
+				        this.terms = data.data;
+				        this.loading = false;
+				      })
+			        .catch((error) => {	     
+					   alert("Terjadi Kesalahan pada server");
+					   this.loading = false;
+		        	}); 
+				}else if(text.length == 0){							
+					this.loading = true;
+					this.fetch();
+				}
 			},
 			
 			destroy(id,index) {

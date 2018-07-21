@@ -32,8 +32,13 @@ class ComplaintController extends Controller
 	}
 
     public function index(Request $request){
-    	$limit = $request->input('limit') ?: 35;
-    	$tweets = $this->tweet->orderBy("date","DESC")->paginate($limit);    	
+		$limit = $request->input('limit') ?: 35;
+		$category_id  = $request->input('category_id');
+        if(is_null($category_id)){
+            $tweets = $this->tweet->orderBy("date","DESC")->paginate($limit);
+        }else{            
+    		$tweets = $this->tweet->where(["category_id" => $category_id])->orderBy("date","DESC")->paginate($limit);
+        }  	
     	$n = $this->tweet->count();
     	$latest_data = $this->tweet->orderBy("date","DESC")->first()->getDateTimeLocalized();
     	return  $this->respondWithPagination($tweets, [

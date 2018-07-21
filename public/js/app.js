@@ -66030,6 +66030,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -66068,20 +66076,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.loading = false;
 			});
 		},
-		destroy: function destroy(id, index) {
+		changeTerm: function changeTerm(text) {
 			var _this2 = this;
+
+			if (text.length > 2) {
+				this.loading = true;
+				axios.get("/api/training-terms/search/" + text).then(function (_ref2) {
+					var data = _ref2.data;
+
+					_this2.terms = data.data;
+					_this2.loading = false;
+				}).catch(function (error) {
+					alert("Terjadi Kesalahan pada server");
+					_this2.loading = false;
+				});
+			} else if (text.length == 0) {
+				this.loading = true;
+				this.fetch();
+			}
+		},
+		destroy: function destroy(id, index) {
+			var _this3 = this;
 
 			if (confirm("Apakah Anda Yakin ?")) {
 				this.pending = true;
-				axios.delete('/api/training-terms/' + id).then(function (_ref2) {
-					var data = _ref2.data;
+				axios.delete('/api/training-terms/' + id).then(function (_ref3) {
+					var data = _ref3.data;
 
 					if (data.error == false) {
-						_this2.$delete(_this2.terms, index);
+						_this3.$delete(_this3.terms, index);
 					} else {
 						alert(data.message);
 					}
-					_this2.pending = false;
+					_this3.pending = false;
 				}).catch(function (error) {
 					if (error.response.status == 404) {
 						alert("Data tidak ditemukan");
@@ -66089,32 +66116,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						console.log(error);
 						//alert("Terjadi Kesalahan pada server");
 					}
-					_this2.pending = false;
+					_this3.pending = false;
 				});
 			}
 		},
 		fetchCategory: function fetchCategory() {
-			var _this3 = this;
+			var _this4 = this;
 
-			axios.get('/api/categories').then(function (_ref3) {
-				var data = _ref3.data;
+			axios.get('/api/categories').then(function (_ref4) {
+				var data = _ref4.data;
 
-				_this3.categories = data;
+				_this4.categories = data;
 			}).catch(function (error) {
 				alert("Terjadi Kesalahan saat mengambil data kategori pada server");
 			});
 		},
 		generateTermAssoc: function generateTermAssoc() {
-			var _this4 = this;
+			var _this5 = this;
 
 			this.pending = true;
 			axios.post('api/training-terms/generate-assoc', {
 				project_id: 1
-			}).then(function (_ref4) {
-				var data = _ref4.data;
+			}).then(function (_ref5) {
+				var data = _ref5.data;
 
-				_this4.messages = "Matrik asosiasi berhasil dibuat";
-				_this4.pending = false;
+				_this5.messages = "Matrik asosiasi berhasil dibuat";
+				_this5.pending = false;
 				$('#modalAlert').modal('show');
 			}).catch(function (error) {
 				if (error.response.status == 404) {
@@ -66122,7 +66149,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				} else {
 					alert("Terjadi Kesalahan pada server");
 				}
-				_this4.pending = false;
+				_this5.pending = false;
 			});
 		}
 	},
@@ -66219,6 +66246,17 @@ var render = function() {
                   "div",
                   { staticClass: "card-header" },
                   [
+                    _c("text-field", {
+                      attrs: {
+                        name: "term",
+                        placeholder: "Cari Kata Kunci...",
+                        label: "",
+                        info: "",
+                        type: "text"
+                      },
+                      on: { changed: _vm.changeTerm }
+                    }),
+                    _vm._v(" "),
                     _c(
                       "router-link",
                       {
