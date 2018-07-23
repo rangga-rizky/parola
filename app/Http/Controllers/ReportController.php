@@ -35,6 +35,8 @@ class ReportController extends Controller
         $data["n_categories"] = $categories->count();
         $dist = $this->getDistCategory(null,null);  
         $data["freq"] = $dist;
+        $data["monthly_freqs"] = $this->getMonthlyFreq();
+        $data["periodes"] = $this->getPeriod();
         $this->drawPie(850, 450, $dist["values"],$dist["labels"]);
         $pdf = PDF::loadView('pdf.report',$data);
 
@@ -66,6 +68,14 @@ class ReportController extends Controller
         arsort($distinct_terms);
         $topWords = array_slice( $distinct_terms, 0,10); 
         return $topWords;
+    }
+
+    private function getMonthlyFreq(){
+        return DB::select("CALL get_number_of_predicted_monthly()");
+    }
+
+    private function getPeriod(){
+        return (DB::select("CALL get_available_periode()"));
     }
 
     private function getComplaintFreq($category){

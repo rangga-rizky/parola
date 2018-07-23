@@ -21,7 +21,7 @@
 						<div class="card">
 								<select class="form-control"   @change="fetch" v-model="selectedCategory">
 									<option value="0">Semua Kategori</option>
-	                                <option v-for="category in categories" :key="category.id" v-bind:value="category.slug">
+	                                <option v-for="category in categories" :key="category.id" v-bind:value="category.id">
 	                                    {{ category.category }}
 	                                </option>
 	                             </select>

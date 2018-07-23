@@ -40,7 +40,7 @@
 
 					</div>
 
-					<div class="row">
+					<!-- <div class="row">
 						<div class="col-3" v-for="(cluster,index) in clusteredWords" :key="index">
 							<div class="card" @click="fetchByCluster(index)" :class="{ 'activated-cluster': isClusterActive(index+1) }">
 								<div class="card-header">
@@ -53,7 +53,7 @@
 								</div>								
 							</div>							
 						</div>
-					</div>
+					</div> -->
 
 					<div class="row">
 					<div class="col-12">					

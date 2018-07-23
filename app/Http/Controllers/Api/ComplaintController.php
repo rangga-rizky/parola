@@ -33,11 +33,11 @@ class ComplaintController extends Controller
 
     public function index(Request $request){
 		$limit = $request->input('limit') ?: 35;
-		$category_id  = $request->input('category_id');
-        if(is_null($category_id)){
+		$category = Category::find($request->input('category_id'));
+        if(is_null($category)){
             $tweets = $this->tweet->orderBy("date","DESC")->paginate($limit);
         }else{            
-    		$tweets = $this->tweet->where(["predicted" => $category_id])->orderBy("date","DESC")->paginate($limit);
+    		$tweets = $this->tweet->where(["predicted" => $category->category])->orderBy("date","DESC")->paginate($limit);
         }  	
     	$n = $this->tweet->count();
     	$latest_data = $this->tweet->orderBy("date","DESC")->first()->getDateTimeLocalized();
@@ -50,7 +50,8 @@ class ComplaintController extends Controller
     public function indexByPredicted($category_slug,Request $request){
     	$category = Category::where('slug',$category_slug)->first();
 		$limit = $request->input('limit') ?: 35;
-		if(is_null($request->input('cluster'))){			
+		if(is_null($request->input('cluster'))){	
+					
 			$tweets = $this->tweet->where('predicted',$category->category)->orderBy("date","DESC")->paginate($limit); 			
 			$n = $this->tweet->where('predicted',$category->category)->count();
 		}else{			

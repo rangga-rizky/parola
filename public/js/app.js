@@ -64203,57 +64203,6 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row" },
-          _vm._l(_vm.clusteredWords, function(cluster, index) {
-            return _c("div", { key: index, staticClass: "col-3" }, [
-              _c(
-                "div",
-                {
-                  staticClass: "card",
-                  class: {
-                    "activated-cluster": _vm.isClusterActive(index + 1)
-                  },
-                  on: {
-                    click: function($event) {
-                      _vm.fetchByCluster(index)
-                    }
-                  }
-                },
-                [
-                  _c("div", { staticClass: "card-header" }, [
-                    _c("h6", [_vm._v("Cluster " + _vm._s(index + 1))])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "card-body" },
-                    [
-                      _vm._l(cluster, function(word, index) {
-                        return _c(
-                          "div",
-                          { key: index, staticClass: "bg-blue" },
-                          [
-                            _vm._v(
-                              "\n\t\t\t\t\t\t\t\t\t\t" + _vm._s(word.name) + " "
-                            ),
-                            _c("span", { staticClass: "badge badge-light" }, [
-                              _vm._v(_vm._s(word.weight))
-                            ])
-                          ]
-                        )
-                      }),
-                      _vm._v(" \n\t\t\t\t\t\t\t\t")
-                    ],
-                    2
-                  )
-                ]
-              )
-            ])
-          })
-        ),
-        _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-12" }, [
             _c("div", { staticClass: "card" }, [
@@ -69493,10 +69442,7 @@ var render = function() {
                     _vm._l(_vm.categories, function(category) {
                       return _c(
                         "option",
-                        {
-                          key: category.id,
-                          domProps: { value: category.slug }
-                        },
+                        { key: category.id, domProps: { value: category.id } },
                         [
                           _vm._v(
                             "\n                                    " +

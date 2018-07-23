@@ -98,6 +98,28 @@
           <h3>Distribusi Kategori</h3>
           <img src="{{public_path()}}/chart/pie.jpg" alt="">
       </div>  
+      <br><br><br><br><br><br><br><br><br><br><br><br>
+      <div>
+          <h3>Data masuk per bulan</h3>  
+          <table style="width:100%">
+             <tr>
+                <th>Kategori</th>
+                @foreach($periodes as $periode)
+                 <th>{{$periode->DATE}}</th>
+                @endforeach
+              </tr>
+              <tbody>
+                  @for($i =0;$i <= $n_categories ;$i++)
+                  <tr>
+                    <td>{{$monthly_freqs[$i*$n_categories-$i]->predicted}}</td>
+                    @for($j =0;$j < sizeof($periodes) ;$j++)
+                        <td>{{$monthly_freqs[$i*$n_categories+$j-$i]->jumlah}}</td>
+                    @endfor
+                  </tr>
+                  @endfor
+              </tbody>
+          </table>
+      </div>
       <br><br>
       <div>
           <h3>Data Masuk</h3>
