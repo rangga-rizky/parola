@@ -73,23 +73,23 @@
       </table>
       
       <div>
-          <h3>Kata Kunci Terbanyak</h3>
+          <h3>Jumlah data Masuk</h3>
           <figure>
-              <figcaption>Grafik Kata kunci paling sering muncul</figcaption>
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="chart" width="420" height="200" aria-labelledby="title" role="img">
+              <figcaption>Jumlah data masuk per kategori</figcaption>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="chart" width="820" height="250" aria-labelledby="title" role="img">
               <title id="title">A bart chart showing information</title>
              
               <?php $y = 0;?>
               <?php $y_text=8; ?>
               
-              @foreach($top_words as $word => $value)
+              @for($i = 0 ;$i < sizeof($freq["labels"]);$i++)
                   <g class="bar">
-                  <rect width="{{$value}}" height="19" y="{{$y}}"></rect>
-                  <text x="{{$value+5}}" y="{{$y_text}}" dy=".35em">{{$value}} {{$word}}</text>
+                  <rect width="{{$freq['values'][$i]/10}}" height="19" y="{{$y}}"></rect>
+                  <text x="{{$freq['values'][$i]/10+5}}" y="{{$y_text}}" dy=".35em">{{$freq['values'][$i]}} {{$freq['labels'][$i]}}</text>
                    </g>
                 <?php $y = $y + 20?>
                 <?php $y_text = $y_text + 20?>
-              @endforeach
+              @endfor
             </svg>
             </figure>
       </div>

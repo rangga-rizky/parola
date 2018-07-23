@@ -19,6 +19,7 @@ class CorrelationMeassure
         usort($results, function($a, $b) {
             return ($a['hasil'] > $b['hasil']) ? -1 : 1;
         });
+
         return $results[0]["class"];
     }
 

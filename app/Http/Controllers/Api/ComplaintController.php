@@ -83,15 +83,15 @@ class ComplaintController extends Controller
 			$terms = Term::orderBy('id')->pluck('term')->toArray(); 
 			$path = "csv/1_training_assoc.csv";
         }else{
-        	$terms = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray(); 
+        	$terms = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("term")->groupBy("term")->pluck('term')->toArray(); 
             $path = "csv/1_automatic_assoc.csv";
-        }
+		}
 		$training = $this->fileHandler->readCSV($path,false)["file"];
 		for ($i=0; $i < sizeof($complaints) ; $i++) { 			
 			$binaryVector = $this->vectorizer->getBinaryVectorFromTokens(explode(",", $complaints[$i]->clean_tweet),$terms);
 			$testing = $binaryVector["vector"];
 			if(array_sum($testing) > 0){
-				$predicted = $correlationMeassure->cosineSimilarity($training,$testing);
+				$predicted = $correlationMeassure->dotProduct($training,$testing);
 			}else{
 				$predicted = "Tidak Terkategori";
 			}
@@ -140,11 +140,11 @@ class ComplaintController extends Controller
 		]);
 	}
 	
-	public function topic_modelling($category_slug){
+	public function topic_modelling(Request $request,$category_slug){
 		ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 50000);
 		$lda = new LDATopicModels();
-		$n_of_cluster = 4;
+		$n_of_topics = $request->k;
 		$category = Category::where("slug",$category_slug)->first();
 		if(empty($category)){
 			return response()->json([
@@ -156,7 +156,7 @@ class ComplaintController extends Controller
 		foreach ($complaints as $complaint) {			
 			$tokenizedTokens[] = ["id" => $complaint->id,"tokens" => explode(",", $complaint->clean_tweet)];
 		}
-		$clustered_complaint = $lda->modelling($tokenizedTokens,$n_of_cluster);
+		$clustered_complaint = $lda->modelling($tokenizedTokens,$n_of_topics);
 		for ($i=0; $i < $n_of_cluster ; $i++) { 			
 			$terms = [];
 			foreach ($clustered_complaint[$i]["words"] as $word => $value) {

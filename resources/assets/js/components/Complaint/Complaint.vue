@@ -16,7 +16,18 @@
 		<section class="content">
 			<div class="container-fluid">
 				<!-- Small boxes (Stat box) -->
-				
+				<div class="row">
+					<div class="col-3">
+						<div class="card">
+								<select class="form-control"   @change="fetch" v-model="selectedCategory">
+									<option value="0">Semua Kategori</option>
+	                                <option v-for="category in categories" :key="category.id" v-bind:value="category.slug">
+	                                    {{ category.category }}
+	                                </option>
+	                             </select>
+						</div>						
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-12">					
 						<div class="card">
@@ -84,17 +95,24 @@
 		      messages:"",
 		      meta:{},
 		      loading:true,	
-		      pending:false,		      
+		      pending:false,
+			   selectedCategory:"0",
+		      categories:[],		      
 		    };
 		  },
 
 		  created() {
-		    this.fetch();
+		    this.fetch();			
+		  	this.fetchCategory();
 		  },
 
 		  methods: {
 		    fetch() {
-		    	axios.get('/api/complaints?page='+this.paginator.current_page)
+				let categoryParam = "";
+		    	if(this.selectedCategory != "0"){
+		    		categoryParam = "&category_id="+this.selectedCategory;
+		    	}
+		    	axios.get('/api/complaints?page='+this.paginator.current_page+categoryParam)
 			        .then(({data}) => {
 				        this.complaints = data.data;
 				        this.meta = data.meta;
@@ -106,6 +124,16 @@
 					   this.loading = false;
 		        });  
 		    },
+
+			fetchCategory() {
+		    	axios.get('/api/categories')
+			        .then(({data}) => {
+				        this.categories = data;
+				      })
+			        .catch((error) => {	     
+					   alert("Terjadi Kesalahan saat mengambil data kategori pada server");
+		        });  
+			},
 
 		    crawl(){
 		    	this.pending = true;

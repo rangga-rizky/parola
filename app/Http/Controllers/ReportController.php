@@ -33,25 +33,26 @@ class ReportController extends Controller
         $data["title"] = $project->name;
         $data["most_category"] = $most_category[0]->predicted;
         $data["n_categories"] = $categories->count();
-        $data["top_words"] = $this->getTopWords(null,null);
         $dist = $this->getDistCategory(null,null);  
-        $this->drawPie(550, 450, $dist["values"],$dist["labels"]);
+        $data["freq"] = $dist;
+        $this->drawPie(850, 450, $dist["values"],$dist["labels"]);
         $pdf = PDF::loadView('pdf.report',$data);
 
         //return response()->view('pdf.report',$data);
         return $pdf->inline();
     }
 
-    private function drawPie($w,$h,$values,$labels){        
+    private function drawPie($w,$h,$values,$labels){   
         $graph = new Graph\PieGraph($w,$h);
-        $graph->SetBox(true);
-     
+        $graph->SetBox(true);        
         $p1   = new Plot\PiePlot($values);
         $p1->ShowBorder();
         $p1->SetColor('black');
         $p1->SetSliceColors(array('#1E90FF', '#2E8B57', '#ADFF2F', '#DC143C', '#BA55D3','#1EFFFF', '#2EEE57', '#AD222F', '#DCC43C', '#BA5AA3'));
         $p1->SetLegends($labels);
-        $graph->Add($p1);
+        $graph->Add($p1);        
+        $graph->legend->SetLayout(LEGEND_VERT);
+        $graph->legend->SetColumns(3);
         @unlink("chart/pie.jpg");
         $graph->Stroke("chart/pie.jpg");
     }

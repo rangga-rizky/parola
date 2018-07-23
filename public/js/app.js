@@ -69346,6 +69346,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -69355,11 +69366,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			messages: "",
 			meta: {},
 			loading: true,
-			pending: false
+			pending: false,
+			selectedCategory: "0",
+			categories: []
 		};
 	},
 	created: function created() {
 		this.fetch();
+		this.fetchCategory();
 	},
 
 
@@ -69367,7 +69381,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		fetch: function fetch() {
 			var _this = this;
 
-			axios.get('/api/complaints?page=' + this.paginator.current_page).then(function (_ref) {
+			var categoryParam = "";
+			if (this.selectedCategory != "0") {
+				categoryParam = "&category_id=" + this.selectedCategory;
+			}
+			axios.get('/api/complaints?page=' + this.paginator.current_page + categoryParam).then(function (_ref) {
 				var data = _ref.data;
 
 				_this.complaints = data.data;
@@ -69379,19 +69397,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.loading = false;
 			});
 		},
-		crawl: function crawl() {
+		fetchCategory: function fetchCategory() {
 			var _this2 = this;
 
-			this.pending = true;
-			axios.post('/api/tweets/crawl/LAPOR1708').then(function (_ref2) {
+			axios.get('/api/categories').then(function (_ref2) {
 				var data = _ref2.data;
 
-				_this2.pending = false;
-				_this2.messages = data.messages;
+				_this2.categories = data;
+			}).catch(function (error) {
+				alert("Terjadi Kesalahan saat mengambil data kategori pada server");
+			});
+		},
+		crawl: function crawl() {
+			var _this3 = this;
+
+			this.pending = true;
+			axios.post('/api/tweets/crawl/LAPOR1708').then(function (_ref3) {
+				var data = _ref3.data;
+
+				_this3.pending = false;
+				_this3.messages = data.messages;
 				$('#modalAlert').modal('show');
 			}).catch(function (error) {
 				alert("Terjadi Kesalahan pada server");
-				_this2.pending = false;
+				_this3.pending = false;
 			});
 		}
 	},
@@ -69422,6 +69451,68 @@ var render = function() {
       _vm._v(" "),
       _c("section", { staticClass: "content" }, [
         _c("div", { staticClass: "container-fluid" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-3" }, [
+              _c("div", { staticClass: "card" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.selectedCategory,
+                        expression: "selectedCategory"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.selectedCategory = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        },
+                        _vm.fetch
+                      ]
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "0" } }, [
+                      _vm._v("Semua Kategori")
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.categories, function(category) {
+                      return _c(
+                        "option",
+                        {
+                          key: category.id,
+                          domProps: { value: category.slug }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(category.category) +
+                              "\n                                "
+                          )
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "col-12" }, [
               _c("div", { staticClass: "card" }, [
@@ -73840,9 +73931,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   methods: {
@@ -74108,7 +74196,7 @@ var staticRenderFns = [
       { staticClass: "brand-link", attrs: { href: "index3.html" } },
       [
         _c("span", { staticClass: "brand-text font-weight-light" }, [
-          _vm._v("LAPOR")
+          _vm._v("LAPOR!")
         ])
       ]
     )
@@ -74118,13 +74206,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "user-panel mt-3 pb-3 mb-3 d-flex" }, [
-      _c("div", { staticClass: "image" }, [
-        _c("img", {
-          staticClass: "img-circle elevation-2",
-          attrs: { src: "admin-lte/img/user2-160x160.jpg", alt: "User Image" }
-        })
-      ]),
-      _vm._v(" "),
       _c("div", { staticClass: "info" }, [
         _c("a", { staticClass: "d-block", attrs: { href: "#" } }, [
           _vm._v("Rangga Rizky")
