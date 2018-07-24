@@ -38,8 +38,7 @@ class ReportController extends Controller
         $data["monthly_freqs"] = $this->getMonthlyFreq();
         $data["periodes"] = $this->getPeriod();
         $this->drawPie(850, 450, $dist["values"],$dist["labels"]);
-        $pdf = PDF::loadView('pdf.report',$data);
-
+        $pdf = PDF::loadView('pdf.report',$data);    
         //return response()->view('pdf.report',$data);
         return $pdf->inline();
     }
