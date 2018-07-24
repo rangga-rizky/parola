@@ -89,6 +89,7 @@ class CorrelationMeassure
                 }              
             }
             $matriks[] = $association_word;
+            
         }
         return $matriks;
     }

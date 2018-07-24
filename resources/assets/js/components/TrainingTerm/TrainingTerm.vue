@@ -46,6 +46,10 @@
 								 <button @click="generateTermAssoc" type="button" class="btn btn-primary" :disabled="pending">
 									 	<i :class="{'fa fa-table':!isPending, 'fa fa-circle-o-notch fa-spin':isPending}"></i> Bentuk matriks Asosiasi
 								 </button>
+								  <button @click="openTermAssoc" type="button" class="btn btn-secondary" >
+									  	<i class="fa fa-eye"></i>
+									 	Lihat matriks Asosiasi
+								  </button>
 							</div>
 							<div class="card-body">
 								<span v-if="isLoading" >
@@ -151,6 +155,10 @@
 					this.loading = true;
 					this.fetch();
 				}
+			},
+
+			openTermAssoc(){
+				window.open("/csv/1_automatic_assoc.csv");
 			},
 			
 			destroy(id,index) {

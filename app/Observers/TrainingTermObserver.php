@@ -25,14 +25,14 @@ class TrainingTermObserver
     }
 
     private function generateTermAssoc($project_id,$corr,$fileHandler){
-        $distinct_terms =  TrainingTerm::select('term', DB::raw('count(*) as total'))->groupBy("term")->pluck('term')->toArray();
+       // $distinct_terms =  TrainingTerm::select('term', DB::raw('count(*) as total'))->groupBy("term")->pluck('term')->toArray();
         $categories = Category::orderBy("id")->get();
         $path = "csv/".$project_id."_automatic_assoc.csv";   
-        $termsPerCategory = [];
+        /*$termsPerCategory = [];
         foreach ($categories as $category) {
             $termsPerCategory[$category->category] = TrainingTerm::select('term')->where("category_id",$category->id)->pluck('term')->toArray();
-        }
-        $matriks = $corr->buildCorrMatrice($distinct_terms,$termsPerCategory,$categories);
+        }*/
+        $matriks = $corr->buildWordProprotionMatrice(new TrainingTerm,$categories);// $corr->buildWordProprotionMatrice(new TrainingTerm,$termsPerCategory,$categories);
         $fileHandler->writeCSV($path,$matriks,null);
 
     }

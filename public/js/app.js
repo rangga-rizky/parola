@@ -65987,6 +65987,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -66043,6 +66047,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				this.loading = true;
 				this.fetch();
 			}
+		},
+		openTermAssoc: function openTermAssoc() {
+			window.open("/csv/1_automatic_assoc.csv");
 		},
 		destroy: function destroy(id, index) {
 			var _this3 = this;
@@ -66233,6 +66240,21 @@ var render = function() {
                           }
                         }),
                         _vm._v(" Bentuk matriks Asosiasi\n\t\t\t\t\t\t\t\t ")
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button" },
+                        on: { click: _vm.openTermAssoc }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-eye" }),
+                        _vm._v(
+                          "\n\t\t\t\t\t\t\t\t\t \tLihat matriks Asosiasi\n\t\t\t\t\t\t\t\t  "
+                        )
                       ]
                     )
                   ],

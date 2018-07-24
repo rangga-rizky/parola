@@ -183,7 +183,7 @@ class ComplaintController extends Controller
 			}
 			$documents = $this->fileHandler->readCSV($path.$file_name,false)["file"];
 			$distinct_terms = $this->fileHandler->readKeyPairCSV('csv/tweet_distinct_terms.csv');
-			$fitur = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray(); 
+			$fitur = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("term")->groupBy("term")->pluck('term')->toArray(); 
 			$path = "csv/1_automatic_assoc.csv";
 			$training = $this->fileHandler->readCSV($path,false)["file"];			
 			foreach ($documents as $document) {				
@@ -248,13 +248,13 @@ class ComplaintController extends Controller
 		}       
 		$this->fileHandler->writeCSV('csv/tweet_distinct_terms.csv',$terms,null);
 		//$fitur = Term::orderBy('id')->pluck('term')->toArray(); 
-		$fitur = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray(); 
+		$fitur = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("term")->groupBy("term")->pluck('term')->toArray(); 
 		$path = "csv/1_automatic_assoc.csv";
 		$training = $this->fileHandler->readCSV($path,false)["file"];
 		$binaryVector = $this->vectorizer->getBinaryVectorFromTokens($words,$fitur);
 		$testing = $binaryVector["vector"];
 		if(array_sum($testing) > 0){
-			$predicted = $correlationMeassure->cosineSimilarity($training,$testing);
+			$predicted = $correlationMeassure->dotProduct($training,$testing);
 		}else{
 			$predicted = "Tidak Terkategori";
 		}
@@ -263,6 +263,7 @@ class ComplaintController extends Controller
 					'username' => '',
 					'tweet' => $request->complaint,
 					'clean_tweet' => implode(",", $words),
+					'words' => implode(",", $binaryVector["words"]),
 					'timestamp' => 0,
 					'date' => $currentTime,
 					'predicted' => $predicted
@@ -272,8 +273,8 @@ class ComplaintController extends Controller
         }
 
 		return response()->json(['error' => false, 'message' => 'new data success created']);
-			$terms = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray(); 
-            $path = "csv/1_automatic_assoc.csv";
+			//$terms = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray(); 
+            //$path = "csv/1_automatic_assoc.csv";
     }
   
 

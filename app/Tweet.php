@@ -10,7 +10,7 @@ class Tweet extends Model
      public $timestamps = False; 
 
      protected $fillable = [
-        'username', 'tweet','date',"timestamp","clean_tweet","predicted"
+        'username', 'tweet','date',"timestamp","clean_tweet","predicted","words"
     ];
 
      public function getDateTimeLocalized()

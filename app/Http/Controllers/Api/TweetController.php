@@ -31,7 +31,7 @@ class TweetController extends Controller
 
 
    
-    public function crawling($query){    
+    public function crawling(Request $request,$query){    
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 5000);    
         $limit = $request->input('limit') ?: 70; 
