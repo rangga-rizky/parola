@@ -72012,6 +72012,26 @@ var render = function() {
                                 _c("td", [
                                   _vm._v(
                                     _vm._s(
+                                      _vm.dataManual.scores[
+                                        index
+                                      ].precission.toFixed(2)
+                                    ) + "%"
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.dataManual.scores[
+                                        index
+                                      ].recall.toFixed(2)
+                                    ) + "%"
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(
                                       _vm.dataAuto.scores[
                                         index
                                       ].precission.toFixed(2)
@@ -72046,6 +72066,15 @@ var render = function() {
                                 _c("strong", [
                                   _vm._v(
                                     _vm._s(_vm.dataBayes.accuracy.toFixed(3)) +
+                                      "%"
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { attrs: { colspan: "2" } }, [
+                                _c("strong", [
+                                  _vm._v(
+                                    _vm._s(_vm.dataManual.accuracy.toFixed(3)) +
                                       "%"
                                   )
                                 ])
@@ -72109,6 +72138,10 @@ var staticRenderFns = [
         ]),
         _vm._v(" "),
         _c("th", { attrs: { colspan: "2" } }, [
+          _vm._v("Correlation Meassurement(Binary Matrice)")
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { colspan: "2" } }, [
           _vm._v("Correlation Meassurement")
         ]),
         _vm._v(" "),
@@ -72116,6 +72149,10 @@ var staticRenderFns = [
       ]),
       _vm._v(" "),
       _c("tr", [
+        _c("th", [_vm._v("Precission")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Recall")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Precission")]),
         _vm._v(" "),
         _c("th", [_vm._v("Recall")]),

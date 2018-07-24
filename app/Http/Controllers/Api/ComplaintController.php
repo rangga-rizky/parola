@@ -92,7 +92,7 @@ class ComplaintController extends Controller
 			$binaryVector = $this->vectorizer->getBinaryVectorFromTokens(explode(",", $complaints[$i]->clean_tweet),$terms);
 			$testing = $binaryVector["vector"];
 			if(array_sum($testing) > 0){
-				$predicted = $correlationMeassure->dotProduct($training,$testing);
+				$predicted = $correlationMeassure->cosineSimilarity($training,$testing);
 			}else{
 				$predicted = "Tidak Terkategori";
 			}
@@ -249,7 +249,7 @@ class ComplaintController extends Controller
 		$this->fileHandler->writeCSV('csv/tweet_distinct_terms.csv',$terms,null);
 		//$fitur = Term::orderBy('id')->pluck('term')->toArray(); 
 		$fitur = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("id")->groupBy("term")->pluck('term')->toArray(); 
-		$path = "csv/1_training_assoc.csv";
+		$path = "csv/1_automatic_assoc.csv";
 		$training = $this->fileHandler->readCSV($path,false)["file"];
 		$binaryVector = $this->vectorizer->getBinaryVectorFromTokens($words,$fitur);
 		$testing = $binaryVector["vector"];

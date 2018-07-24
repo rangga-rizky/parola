@@ -16,7 +16,7 @@ use DB;
 
 class ValidationController extends Controller
 {
-    private $size_of_docs = 2564;
+    private $size_of_docs = 2468;
 
     public function loo(){
     	ini_set('memory_limit', '-1');
@@ -53,17 +53,17 @@ class ValidationController extends Controller
             }                
         }
 
-    	for ($i=1; $i <= 2564 ; $i++) { 
+    	for ($i=1; $i <= 2468 ; $i++) { 
     		$test_data = Document::find($i);
     		
             $matriks = $this->buildMatrice($terms,$termsperCategory,$categories);  
             $training = array_slice($matriks, 1);
         	$binaryVector = $vectorizer->getBinaryVector($test_data->complaint,$terms);  
 			$testing = $binaryVector["vector"];
-            $predicted = $corr->cosineSimilarity($training,$testing);
+            $predicted = $corr->dotProduct($training,$testing);
            // dd($predicted);
-            $test_data->words = implode(", ", $binaryVector["words"]);
-            $test_data->predicted = $predicted;
+            $test_data->manual_words = implode(", ", $binaryVector["words"]);
+            $test_data->manual_predicted = $predicted;
             $test_data->save(); 
 			if($test_data->category != $predicted){
 				$missclassified++;
@@ -74,7 +74,7 @@ class ValidationController extends Controller
     }
 
     private function buildMatrice($distinct_terms,$termsperCategory,$categories){
-       $fitur[] = "";
+       /*$fitur[] = "";
         foreach ($distinct_terms as $term) {
            $fitur[] = $term ;
         }
@@ -96,8 +96,8 @@ class ValidationController extends Controller
             }//dd($association_word);
             $matriks[] = $association_word;
         } 
+        */
 
-/*
         $fitur[] = "";
         foreach ($distinct_terms as $term) {
            $fitur[] = $term ;
@@ -117,7 +117,7 @@ class ValidationController extends Controller
                 }               
             }
             $matriks[] = $association_word;
-        }*/
+        }
         return $matriks;
     }
 
@@ -284,7 +284,7 @@ class ValidationController extends Controller
         }
 
         
-        for ($i=1500; $i < 2564 ; $i++) { 
+        for ($i=1500; $i < 2468 ; $i++) { 
             $wordProb = [];
             $classProb = [];
             $testing = $datasets[$i];

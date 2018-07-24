@@ -33,14 +33,15 @@ class TweetController extends Controller
    
     public function crawling($query){    
         ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 5000);     
+        ini_set('max_execution_time', 5000);    
+        $limit = $request->input('limit') ?: 70; 
         $lastestTimeStampTweet = Tweet::max("timestamp");
         if(empty($lastestTimeStampTweet)){
             $lastestTimeStampTweet = 0;
         }
         $distinct_terms = $this->fileHandler->readKeyPairCSV('csv/tweet_distinct_terms.csv');
         $this->tweetCriteria->setQuerySearch($query);
-        $this->tweetCriteria->setMaxTweets(100);
+        $this->tweetCriteria->setMaxTweets($limit);
         $tweets = $this->tweetCrawler->getTweets($this->tweetCriteria,$lastestTimeStampTweet);
         $path = "csv/1_training_assoc.csv";
         $training = $this->fileHandler->readCSV($path,false)["file"];	

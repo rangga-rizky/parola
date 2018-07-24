@@ -50,7 +50,7 @@ class ReportController extends Controller
         $p1   = new Plot\PiePlot($values);
         $p1->ShowBorder();
         $p1->SetColor('black');
-        $p1->SetSliceColors(array('#1E90FF', '#2E8B57', '#ADFF2F', '#DC143C', '#BA55D3','#1EFFFF', '#2EEE57', '#AD222F', '#DCC43C', '#BA5AA3'));
+        $p1->SetSliceColors(array('#1E90FF', '#2E8B57', '#ADFF2F', '#DC143C', '#BA55D3','#1EFFFF', '#2EEE57', '#AD222F', '#DCC43C', '#BA5AA3','#AAAAAA'));
         $p1->SetLegends($labels);
         $graph->Add($p1);        
         $graph->legend->SetLayout(LEGEND_VERT);
