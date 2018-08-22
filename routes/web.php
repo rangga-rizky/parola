@@ -14,6 +14,7 @@
 Route::get('/', function(){
 	return view('index');
 });
+Route::get('/validation/experiment', 'ValidationController@experiment');
 Route::get('/validation/loo', 'ValidationController@loo');
 Route::get('/validation/clean', 'ValidationController@clean_data');
 Route::get('/validation/dist', 'ValidationController@dist');
@@ -21,6 +22,7 @@ Route::get('/validation/binary-matrix', 'ValidationController@binaryMatrix');
 Route::get('/validation/loo/score', 'ValidationController@score');
 Route::get('/validation/bayes', 'ValidationController@bayes');
 Route::get('/validation/manual', 'ValidationController@manual');
+Route::get('/tes', 'ValidationController@tes');
 
 Route::get('/report/{project_slug}/print-pdf', 'ReportController@printPdf');
 

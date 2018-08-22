@@ -34,7 +34,7 @@ class CorrelationMeassure
                 $dotproduct = $dotproduct + ($testing[$j] * $training[$i][$j+1]);
             }
             if($sumOfAbsTesting  * $sumOfAbstraining > 0){                
-                 $results[$i]["hasil"] = $dotproduct / ($sumOfAbsTesting  * $sumOfAbstraining);
+                 $results[$i]["hasil"] = $dotproduct / (sqrt($sumOfAbsTesting)  * sqrt($sumOfAbstraining));
             }else{
                 $results[$i]["hasil"] = 0;
             }
@@ -44,6 +44,7 @@ class CorrelationMeassure
         usort($results, function($a, $b) {
             return ($a['hasil'] > $b['hasil']) ? -1 : 1;
         });
+       // dd($results);
         return $results[0]["class"];
     }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f382903fa080254d53a7132f8652b707",
+    "content-hash": "d1df9aafacc193ce79d2e5c8a0372a7f",
     "packages": [
         {
             "name": "amenadiel/jpgraph",
@@ -2123,6 +2123,42 @@
                 "uuid"
             ],
             "time": "2018-01-20T00:28:24+00:00"
+        },
+        {
+            "name": "rangga/lda-topic-model",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rangga-rizky/lda-topic-model.git",
+                "reference": "8f2eb76d2b81d0d110429e0eb8955f25b7e69aff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rangga-rizky/lda-topic-model/zipball/8f2eb76d2b81d0d110429e0eb8955f25b7e69aff",
+                "reference": "8f2eb76d2b81d0d110429e0eb8955f25b7e69aff",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LdaTopicModel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rangga Rizky Ardhianto",
+                    "email": "ranggaantok@gmail.com",
+                    "homepage": "https://medium.com/@ranggaantok",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Topic Modelling with Latent Dirchlect Allocation",
+            "homepage": "https://github.com/rangga-rizky/lda-topic-model",
+            "time": "2018-08-17T07:34:33+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",

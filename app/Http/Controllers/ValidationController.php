@@ -11,7 +11,9 @@ use App\Helper\CorrelationMeassure;
 use App\Helper\Vectorizer;
 use App\Helper\FileHandler;
 use App\Helper\NaiveBayes;
+use App\Helper\KeywordExtractor;
 use App\CsvFile;
+use App\TrainingTerm;
 use DB;
 
 class ValidationController extends Controller
@@ -26,42 +28,39 @@ class ValidationController extends Controller
     	$vectorizer = new Vectorizer(new TextMiner);
         $fileHandler = new FileHandler();
     	$categories = Category::all();
+        $distinct_terms = $fileHandler->readCSV("csv/distinct_terms.csv",true)["file"][0];     
 
-        $distinct_terms = $fileHandler->readCSV("csv/distinct_terms.csv",true)["file"][0];
-        
-        $terms = [];
-        $termsperCategory = [];
-        for($c = 0; $c < sizeof($categories); $c++){ 
-            //$testing_token =  explode(",", trim($test_data->clean_complaint));
-            
-            $file1 = fopen("csv/terms_per_c/".$categories[$c]->id.".csv", 'r');
-            while (($line = fgetcsv($file1)) !== FALSE) {
-                $topWords[$line[0]] = intval($line[1]);                
-            }              
-            fclose($file1);
-          //  foreach ($testing_token as $word) {
-            //    $topWords[$word]--;                    
-           // }
-           //
-            $nonZeroWods = array_filter($topWords, function($val) { return $val > 0; });            
-            $thresHolded = array_filter($topWords, function($val) use ($nonZeroWods) { return $val > (array_sum($nonZeroWods)/sizeof($nonZeroWods)); });
-            foreach ($thresHolded as $topword => $value) {
-                $termsperCategory[$categories[$c]->category][] = ["word" => $topword,"score"=>$value];
-                if(!in_array($topword, $terms)){
-                    $terms[] = $topword;
-                }                    
-            }                
-        }
-
-    	for ($i=1; $i <= 2468 ; $i++) { 
+    	for ($i=1574; $i <= 2468 ; $i++) { 
     		$test_data = Document::find($i);
-    		
+            $terms = [];
+            $termsperCategory = [];
+            for($c = 0; $c < sizeof($categories); $c++){ 
+                $testing_token =  explode(",", trim($test_data->clean_complaint));
+                
+                $file1 = fopen("csv/terms_per_c/".$categories[$c]->id.".csv", 'r');
+                while (($line = fgetcsv($file1)) !== FALSE) {
+                    $topWords[$line[0]] = intval($line[1]);                
+                }              
+                fclose($file1);
+                foreach ($testing_token as $word) {
+                    $topWords[$word]--;                    
+                }
+               
+                $nonZeroWods = array_filter($topWords, function($val) { return $val > 0; });            
+                $thresHolded = array_filter($topWords, function($val) use ($nonZeroWods) { return $val > (array_sum($nonZeroWods)/sizeof($nonZeroWods)); });
+                foreach ($thresHolded as $topword => $value) {
+                    $termsperCategory[$categories[$c]->category][] = ["word" => $topword,"score"=>$value];
+                    if(!in_array($topword, $terms)){
+                        $terms[] = $topword;
+                    }                    
+                }                
+            }
             $matriks = $this->buildMatrice($terms,$termsperCategory,$categories);  
             $training = array_slice($matriks, 1);
         	$binaryVector = $vectorizer->getBinaryVector($test_data->complaint,$terms);  
 			$testing = $binaryVector["vector"];
-            $predicted = $corr->dotProduct($training,$testing);
-           // dd($predicted);
+            $predicted = $corr->cosineSimilarity($training,$testing);
+            dd(microtime());
             $test_data->manual_words = implode(", ", $binaryVector["words"]);
             $test_data->manual_predicted = $predicted;
             $test_data->save(); 
@@ -74,7 +73,7 @@ class ValidationController extends Controller
     }
 
     private function buildMatrice($distinct_terms,$termsperCategory,$categories){
-       /*$fitur[] = "";
+       $fitur[] = "";
         foreach ($distinct_terms as $term) {
            $fitur[] = $term ;
         }
@@ -96,7 +95,7 @@ class ValidationController extends Controller
             }//dd($association_word);
             $matriks[] = $association_word;
         } 
-        */
+        /*
 
         $fitur[] = "";
         foreach ($distinct_terms as $term) {
@@ -117,7 +116,7 @@ class ValidationController extends Controller
                 }               
             }
             $matriks[] = $association_word;
-        }
+        }*/
         return $matriks;
     }
 
@@ -284,10 +283,11 @@ class ValidationController extends Controller
         }
 
         
-        for ($i=1500; $i < 2468 ; $i++) { 
+        for ($i=1573; $i < 2468 ; $i++) { 
             $wordProb = [];
             $classProb = [];
             $testing = $datasets[$i];
+           // dd($testing);
             $training = $datasets;
             array_splice($training, $i,1);            
             $probs = $naivBayes->training($training,$category_name,$terms);
@@ -303,7 +303,7 @@ class ValidationController extends Controller
                     $termIndex[] = $terms[$j];
                 }
             }
-           // dd($naivBayes->testing($termIndex,$wordProb,$classProb));
+            $naivBayes->testing($termIndex,$wordProb,$classProb);
             $document = Document::find($i+1);
             $document->bayes_predicted = $naivBayes->testing($termIndex,$wordProb,$classProb);
             $document->save();
@@ -336,6 +336,131 @@ class ValidationController extends Controller
             }
         }
         dd($missclassified);
+    }
+
+    public function experiment(){
+        ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 50000);  
+        $fileHandler = new FileHandler();
+       /* $categories = Category::all();
+        $keywordExtractor = new KeywordExtractor();
+        $distinct_terms = $fileHandler->readCSV("csv/distinct_terms.csv",true)["file"][0];
+        $terms = [];
+        for($c = 0; $c < sizeof($categories); $c++){ 
+            $tokenized_text = [];           
+            $complaints = Document::orderBy("id")->where("category_id",$categories[$c]->id)->get(); 
+            foreach ($complaints as $complaint) {
+                $tokenized_text[] = explode(",", $complaint->clean_complaint );            
+            }
+            $topWords = $keywordExtractor->aggregate($tokenized_text,$distinct_terms);
+            $i = 0;
+            $trainingTerm = array();
+            foreach ($topWords as $topword => $value) {
+                $termsperCategory[$categories[$c]->category][] = ["word" => $topword,"score"=>$value];
+                if(!in_array($topword, $terms)){
+                    $terms[] = $topword;
+                
+                }  
+            }    
+        }
+        $matriks = $this->buildMatrice($terms,$termsperCategory,$categories); */
+        
+        $naivBayes = new NaiveBayes();
+        $vectorizer = new Vectorizer(new TextMiner());   
+        /*$category_name = Category::orderBy("id")->pluck('category')->toArray();    
+        $distinct_terms = $fileHandler->readCSV("csv/distinct_terms.csv",true)["file"][0];
+        $complaints = Document::orderBy("id")->get(); 
+        $trainings = [];
+        foreach ($complaints as $complaint) {
+            $trainings[] = explode(",", $complaint->clean_complaint);
+        }  
+
+        foreach ($distinct_terms as $distinct_term) {
+            $topWords[$distinct_term] = 0;
+        }           
+        foreach ($trainings as $training) {
+            for ($i=0; $i < sizeof($distinct_terms); $i++) { 
+                if(in_array($distinct_terms[$i], $training)){
+                    $topWords[$distinct_terms[$i]]++;
+                }
+            }
+        }
+        $nonZeroWods = array_filter($topWords, function($val) { return $val > 0; });
+        $thresHolded = array_filter($topWords, function($val) use ($nonZeroWods) { return $val > array_sum($nonZeroWods)/sizeof($nonZeroWods); });   
+        arsort($thresHolded);
+        foreach ($thresHolded as $word => $value) {
+            $terms[] =  $word;
+        }
+
+        for ($c=0; $c < sizeof($complaints) ; $c++) { 
+            $binaryVector = array();
+            $result = $vectorizer->getBinaryVector($complaints[$c],$terms);
+            for ($i=0; $i < sizeof($terms); $i++) { 
+                $binaryVector[$terms[$i]] = $result["vector"][$i];
+            }
+            $binaryVector["labeled_category"] = $complaints[$c]->category;
+            $binaryMatrix[] = $binaryVector;
+        }        
+        $probs = $naivBayes->training($binaryMatrix,$category_name,$terms);
+       
+        $totalTimes = 0;
+    	$naiveBayes = new NaiveBayes();
+		$categories = Category::all();	    	
+		$complaints = Document::orderBy('id')->get();		
+		$training = array();
+		$terms = array();
+		$readWord = $fileHandler->readCSV("csv/1_word_prob.csv",false);
+		$wordProb = $readWord["file"];
+		$terms = $readWord["firstLine"];
+		$classProb = $fileHandler->readCSV("csv/1_class_prob.csv",true)["file"];
+		for ($i=0; $i < sizeof($complaints) ; $i++) { 
+			$startTime = (microtime(true));
+			$termIndex = array();
+			$tokens = explode(",", $complaints[$i]->clean_complaint);
+			for ($j=0; $j < sizeof($terms) - 1; $j++) { 
+				if(in_array($terms[$j], $tokens)){
+					$termIndex[] = $j;			
+				}
+			}
+			if(empty($termIndex)){
+				$predicted = "Tidak Terkategori";
+			}else{
+				$predicted = $naiveBayes->testing($termIndex,$wordProb,$classProb);	
+			}			
+			//$complaints[$i]->predicted = $predicted;
+			//$complaints[$i]->save();
+            $finishTime =(microtime(true)); 
+            $totalTimes = $totalTimes + ($finishTime - $startTime);
+
+		}
+        dd($totalTimes/2468);	 */
+        
+     
+        $totalTimes = 0;
+        $correlationMeassure = new CorrelationMeassure();
+		$complaints = Document::orderBy('id')->get();
+		$categories = Category::all();	
+    	$terms = TrainingTerm::select('term', DB::raw('count(*) as total'))->orderBy("term")->groupBy("term")->pluck('term')->toArray(); 
+         $path = "csv/1_automatic_assoc.csv";
+		$training = $fileHandler->readCSV($path,false)["file"];
+		for ($i=0; $i < sizeof($complaints) ; $i++) { 			
+            $startTime = (microtime(true));
+			$binaryVector = $vectorizer->getBinaryVectorFromTokens(explode(",", $complaints[$i]->clean_tweet),$terms);
+			$testing = $binaryVector["vector"];
+			if(array_sum($testing) > 0){
+				$predicted = $correlationMeassure->cosineSimilarity($training,$testing);
+			}else{
+				$predicted = "Tidak Terkategori";
+			}
+			
+            $finishTime =(microtime(true)); 
+            $totalTimes = $totalTimes + ($finishTime - $startTime);		
+        }
+        dd($totalTimes/2468);
+    }
+
+    public function tes(){
+        $library = new \LdaTopicModel;
     }
 
     

@@ -30,18 +30,21 @@
 									<thead class="thead-dark">
 										<tr>
 											<th rowspan="2">Category</th>
-											<th colspan="2">Naive Bayes Classifier</th>
-                                          <th colspan="2">Correlation Meassurement(Binary Matrice)</th> 
-                                            <th colspan="2">Correlation Meassurement</th>
+											<th colspan="3">Naive Bayes Classifier</th>
+                                          <th colspan="3">Correlation Meassurement(Binary Matrice)</th> 
+                                            <th colspan="3">Correlation Meassurement</th>
                                             <th rowspan="2">Jumlah Data</th>
 										</tr>
                                         <tr>
                                             <th>Precission</th>
                                             <th>Recall</th>
+											<th>F1</th>
+                                            <th>Precission</th>
+                                            <th>Recall</th>											
+											<th>F1</th>
                                             <th>Precission</th>
                                             <th>Recall</th>
-                                            <th>Precission</th>
-                                            <th>Recall</th>
+											<th>F1</th>
                                         </tr>
 									</thead>
 									<tbody>
@@ -49,17 +52,20 @@
 											<td>{{ category }}</td>
 											<td>{{ dataBayes.scores[index].precission.toFixed(2)}}%</td>
                                             <td>{{ dataBayes.scores[index].recall.toFixed(2)}}%</td>
+											<td>{{ dataBayes.scores[index].f1.toFixed(2)}}%</td>
                                            <td>{{ dataManual.scores[index].precission.toFixed(2)}}%</td>
                                             <td>{{ dataManual.scores[index].recall.toFixed(2)}}%</td>
+											<td>{{ dataManual.scores[index].f1.toFixed(2)}}%</td>
                                             <td>{{ dataAuto.scores[index].precission.toFixed(2)}}%</td>
                                             <td>{{ dataAuto.scores[index].recall.toFixed(2)}}%</td>
+											<td>{{ dataAuto.scores[index].f1.toFixed(2)}}%</td>
                                             <td>{{ dataBayes.scores[index].number_of_data  }}</td>                                           
 										</tr>						
                                         <tr>
                                             <td ><strong>Accuracy</strong></td>
-                                            <td colspan="2"><strong>{{dataBayes.accuracy.toFixed(3)}}%</strong></td>
-                                             <td colspan="2"><strong>{{dataManual.accuracy.toFixed(3)}}%</strong></td> 
-                                            <td colspan="2"><strong>{{dataAuto.accuracy.toFixed(3)}}%</strong></td>
+                                            <td colspan="3"><strong>{{dataBayes.accuracy.toFixed(3)}}%</strong></td>
+                                             <td colspan="3"><strong>{{dataManual.accuracy.toFixed(3)}}%</strong></td> 
+                                            <td colspan="3"><strong>{{dataAuto.accuracy.toFixed(3)}}%</strong></td>
                                         </tr>				
 									</tbody>
 									<tfoot>

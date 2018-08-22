@@ -64203,6 +64203,57 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "row" },
+          _vm._l(_vm.clusteredWords, function(cluster, index) {
+            return _c("div", { key: index, staticClass: "col-3" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "card",
+                  class: {
+                    "activated-cluster": _vm.isClusterActive(index + 1)
+                  },
+                  on: {
+                    click: function($event) {
+                      _vm.fetchByCluster(index)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "card-header" }, [
+                    _c("h6", [_vm._v("Cluster " + _vm._s(index + 1))])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "card-body" },
+                    [
+                      _vm._l(cluster, function(word, index) {
+                        return _c(
+                          "div",
+                          { key: index, staticClass: "bg-blue" },
+                          [
+                            _vm._v(
+                              "\n\t\t\t\t\t\t\t\t\t\t" + _vm._s(word.name) + " "
+                            ),
+                            _c("span", { staticClass: "badge badge-light" }, [
+                              _vm._v(_vm._s(word.weight))
+                            ])
+                          ]
+                        )
+                      }),
+                      _vm._v(" \n\t\t\t\t\t\t\t\t")
+                    ],
+                    2
+                  )
+                ]
+              )
+            ])
+          })
+        ),
+        _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-12" }, [
             _c("div", { staticClass: "card" }, [
@@ -71918,6 +71969,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 												data: function data() {
@@ -72034,6 +72091,14 @@ var render = function() {
                                 _c("td", [
                                   _vm._v(
                                     _vm._s(
+                                      _vm.dataBayes.scores[index].f1.toFixed(2)
+                                    ) + "%"
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(
                                       _vm.dataManual.scores[
                                         index
                                       ].precission.toFixed(2)
@@ -72047,6 +72112,14 @@ var render = function() {
                                       _vm.dataManual.scores[
                                         index
                                       ].recall.toFixed(2)
+                                    ) + "%"
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.dataManual.scores[index].f1.toFixed(2)
                                     ) + "%"
                                   )
                                 ]),
@@ -72074,6 +72147,14 @@ var render = function() {
                                 _c("td", [
                                   _vm._v(
                                     _vm._s(
+                                      _vm.dataAuto.scores[index].f1.toFixed(2)
+                                    ) + "%"
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(
+                                    _vm._s(
                                       _vm.dataBayes.scores[index].number_of_data
                                     )
                                   )
@@ -72084,7 +72165,7 @@ var render = function() {
                             _c("tr", [
                               _vm._m(2),
                               _vm._v(" "),
-                              _c("td", { attrs: { colspan: "2" } }, [
+                              _c("td", { attrs: { colspan: "3" } }, [
                                 _c("strong", [
                                   _vm._v(
                                     _vm._s(_vm.dataBayes.accuracy.toFixed(3)) +
@@ -72093,7 +72174,7 @@ var render = function() {
                                 ])
                               ]),
                               _vm._v(" "),
-                              _c("td", { attrs: { colspan: "2" } }, [
+                              _c("td", { attrs: { colspan: "3" } }, [
                                 _c("strong", [
                                   _vm._v(
                                     _vm._s(_vm.dataManual.accuracy.toFixed(3)) +
@@ -72102,7 +72183,7 @@ var render = function() {
                                 ])
                               ]),
                               _vm._v(" "),
-                              _c("td", { attrs: { colspan: "2" } }, [
+                              _c("td", { attrs: { colspan: "3" } }, [
                                 _c("strong", [
                                   _vm._v(
                                     _vm._s(_vm.dataAuto.accuracy.toFixed(3)) +
@@ -72155,15 +72236,15 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", { attrs: { rowspan: "2" } }, [_vm._v("Category")]),
         _vm._v(" "),
-        _c("th", { attrs: { colspan: "2" } }, [
+        _c("th", { attrs: { colspan: "3" } }, [
           _vm._v("Naive Bayes Classifier")
         ]),
         _vm._v(" "),
-        _c("th", { attrs: { colspan: "2" } }, [
+        _c("th", { attrs: { colspan: "3" } }, [
           _vm._v("Correlation Meassurement(Binary Matrice)")
         ]),
         _vm._v(" "),
-        _c("th", { attrs: { colspan: "2" } }, [
+        _c("th", { attrs: { colspan: "3" } }, [
           _vm._v("Correlation Meassurement")
         ]),
         _vm._v(" "),
@@ -72175,13 +72256,19 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Recall")]),
         _vm._v(" "),
+        _c("th", [_vm._v("F1")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Precission")]),
         _vm._v(" "),
         _c("th", [_vm._v("Recall")]),
         _vm._v(" "),
+        _c("th", [_vm._v("F1")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Precission")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Recall")])
+        _c("th", [_vm._v("Recall")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("F1")])
       ])
     ])
   },

@@ -96,8 +96,8 @@
       <br><br>
       <div>
           <h3>Distribusi Kategori</h3>
-            <!--<img src="localhost/chart/pie.jpg" alt="" >-->            
-          <img src="{{url('/chart/pie.jpg')}}" alt=""> 
+          <img src="{{public_path()}}/chart/pie.jpg" alt="">                     
+          <!-- <img src="{{url('/chart/pie.jpg')}}" alt=""> -->
       </div>  
       <br><br><br><br><br><br><br><br><br><br><br><br>
       <div>

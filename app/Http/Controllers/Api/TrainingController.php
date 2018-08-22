@@ -190,7 +190,8 @@ class TrainingController extends Controller
 							            ->where("category_id",$category->id)
 							            ->count();      
             $score["precission"] = ($true_pred)/$n_predicted * 100; 
-            $score["recall"] = ($true_pred)/$n * 100;   
+            $score["recall"] = ($true_pred)/$n * 100; 
+            $score["f1"] = 2 * ($score["precission"] * $score["recall"] / ($score["precission"] + $score["recall"]));
             $score["number_of_data"] = $n;         
         	$score["category"] = $category->category;
         	$scores[] = $score;

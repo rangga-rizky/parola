@@ -58,6 +58,7 @@ class NaiveBayes
         usort($results, function($a, $b) {
             return ($a['prob'] > $b['prob']) ? -1 : 1;
         });
+     //   dd($results);
 
         return $results[0]["category"];
     }
